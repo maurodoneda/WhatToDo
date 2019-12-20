@@ -28,7 +28,8 @@ namespace WhatToDo
             services.AddControllersWithViews();
 
             services.AddDbContext<WhatToDoContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("WhatToDoContext")));
+                    options.UseMySql(Configuration.GetConnectionString("WhatToDoContext"), builder => 
+                    builder.MigrationsAssembly("WhatToDo")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
