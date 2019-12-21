@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WhatToDo.Data;
 
 namespace WhatToDo.Migrations
 {
     [DbContext(typeof(WhatToDoContext))]
-    partial class WhatToDoContextModelSnapshot : ModelSnapshot
+    [Migration("20191221190712_Second")]
+    partial class Second
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,8 +21,9 @@ namespace WhatToDo.Migrations
 
             modelBuilder.Entity("WhatToDo.Models.ToDo", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
@@ -31,15 +34,18 @@ namespace WhatToDo.Migrations
                     b.Property<int>("KindOfToDo")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("ToDoName")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                    b.Property<int?>("ToDoId")
+                        .HasColumnType("int");
 
-                    b.HasKey("Name");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ToDoName");
+                    b.HasIndex("ToDoId");
 
                     b.ToTable("ToDo");
                 });
@@ -48,7 +54,7 @@ namespace WhatToDo.Migrations
                 {
                     b.HasOne("WhatToDo.Models.ToDo", null)
                         .WithMany("List")
-                        .HasForeignKey("ToDoName");
+                        .HasForeignKey("ToDoId");
                 });
 #pragma warning restore 612, 618
         }

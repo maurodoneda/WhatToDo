@@ -22,11 +22,11 @@ namespace WhatToDo.Controllers
         // GET: ToDoes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ToDo.ToListAsync());
+            return View(await _context.ToDo.OrderBy(item => item.Date).ToListAsync());
         }
 
         // GET: ToDoes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
@@ -34,7 +34,7 @@ namespace WhatToDo.Controllers
             }
 
             var toDo = await _context.ToDo
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Name == id);
             if (toDo == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace WhatToDo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Date,Duration")] ToDo toDo)
+        public async Task<IActionResult> Create([Bind("Name,Date,Duration,Status,KindOfToDo")] ToDo toDo)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +66,7 @@ namespace WhatToDo.Controllers
         }
 
         // GET: ToDoes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
@@ -86,9 +86,9 @@ namespace WhatToDo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date,Duration")] ToDo toDo)
+        public async Task<IActionResult> Edit(string id, [Bind("Name,Date,Duration,Status,KindOfToDo")] ToDo toDo)
         {
-            if (id != toDo.Id)
+            if (id != toDo.Name)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace WhatToDo.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ToDoExists(toDo.Id))
+                    if (!ToDoExists(toDo.Name))
                     {
                         return NotFound();
                     }
@@ -117,7 +117,7 @@ namespace WhatToDo.Controllers
         }
 
         // GET: ToDoes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
@@ -125,7 +125,7 @@ namespace WhatToDo.Controllers
             }
 
             var toDo = await _context.ToDo
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Name == id);
             if (toDo == null)
             {
                 return NotFound();
@@ -137,7 +137,7 @@ namespace WhatToDo.Controllers
         // POST: ToDoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var toDo = await _context.ToDo.FindAsync(id);
             _context.ToDo.Remove(toDo);
@@ -145,9 +145,9 @@ namespace WhatToDo.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ToDoExists(int id)
+        private bool ToDoExists(string id)
         {
-            return _context.ToDo.Any(e => e.Id == id);
+            return _context.ToDo.Any(e => e.Name == id);
         }
     }
 }

@@ -14,6 +14,6 @@ namespace WhatToDo.Data
         {
         }
 
-        public DbSet<WhatToDo.Models.ToDo> ToDo { get; set; }
+        public DbSet<ToDo> ToDo { get; set; }
     }
 }
